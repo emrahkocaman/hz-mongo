@@ -1,0 +1,54 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hz="http://www.hazelcast.com/schema/spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.hazelcast.com/schema/spring
+                http://www.hazelcast.com/schema/spring/hazelcast-spring-3.3.xsd
+                ">
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/hazelcast-config.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+	<mongo:mongo id="mongo" host="localhost" port="27017"/>
+
+	<bean id="mongoTemplate"
+	      class="org.springframework.data.mongodb.core.MongoTemplate">
+	    <constructor-arg ref="mongo"/>
+	    <constructor-arg name="databaseName" value="test"/>
+	</bean>
+
+	<bean class="com.example.test.mongo.MongoMapStore" id="mongoMapStore">
+	    <property name="mongoTemplate" ref="mongoTemplate" />
+	</bean>-->
+    
+     <hz:hazelcast id="instance">
+        <hz:config>
+            <hz:group name="${name}" password="${password}"/>
+            <hz:properties>
+                <hz:property name="hazelcast.merge.first.run.delay.seconds">5</hz:property>
+                <hz:property name="hazelcast.merge.next.run.delay.seconds">5</hz:property>
+            </hz:properties>
+            <hz:network port="${defaultPort}" port-auto-increment="true">
+            	<hz:join>
+	                <hz:multicast enabled="false" />
+	            	<hz:aws enabled="true" access-key="${amazon.access.key}" secret-key="${amazon.secret.key}" security-group-name="${amazon.group.name}" />
+				</hz:join>
+            </hz:network>
+
+            <hz:map name="map">
+                <!-- <hz:map-store enabled="true" implementation="mongoMapStore"
+                              write-delay-seconds="0"/> -->
+            </hz:map>
+
+        </hz:config>
+    </hz:hazelcast>
+
+   
+</beans>

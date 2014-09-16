@@ -1,0 +1,15 @@
+over/
+target/
+.project
+.classpath
+.settings/
+.idea/
+.patch
+*.iml
+*.ipr
+*.iws
+.DS_Store
+reports/
+.directory
+dependency-reduced-pom.xml
+.springBeans
